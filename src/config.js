@@ -1,11 +1,9 @@
-import { schema } from 'normalizr';
-
 import BaseConfig from './base_config';
-import { entitiesExceptID } from './helpers';
+import helpers from './helpers';
 
-export const ConfigSchema = (entityName) => {
-  return new schema.Entity(entityName);
-};
+const { entitiesExceptID } = helpers;
+
+export const { configSchema } = helpers;
 
 class ReduxEntityConfig extends BaseConfig {
   get actions () {

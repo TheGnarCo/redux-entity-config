@@ -1,8 +1,23 @@
 import expect from 'expect';
+import { schema } from 'normalizr';
 
-import { entitiesExceptID, formatErrorResponse } from '../src/helpers';
+import helpers from '../src/helpers';
+
+const {
+  configSchema,
+  entitiesExceptID,
+  formatErrorResponse,
+} = helpers;
 
 describe('ReduxEntityConfig - helpers', () => {
+  describe('#configSchema', () => {
+    it('returns an instance of normalizr schema.Entity', () => {
+      const userSchema = configSchema('users');
+
+      expect(userSchema instanceof schema.Entity).toEqual(true);
+    });
+  });
+
   describe('#entitiesExceptID', () => {
     it('returns an empty object if all ids are deleted', () => {
       const entities = {

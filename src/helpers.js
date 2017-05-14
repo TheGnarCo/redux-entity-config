@@ -1,4 +1,9 @@
 import { get, join, pickBy } from 'lodash';
+import { schema } from 'normalizr';
+
+export const configSchema = (entityName) => {
+  return new schema.Entity(entityName);
+};
 
 export const entitiesExceptID = (entities, id) => {
   return pickBy(entities, (entity, key) => {
@@ -35,4 +40,4 @@ export const formatErrorResponse = (errorResponse) => {
   };
 };
 
-export default { entitiesExceptID, formatErrorResponse };
+export default { configSchema, entitiesExceptID, formatErrorResponse };
