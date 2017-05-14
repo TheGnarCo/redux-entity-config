@@ -31,7 +31,7 @@ The first step to configuring an entity is to create an instance of the
 | updateFunc           | `Function` | false     | The function (API call) used to update an entity                            |
 | parseApiResponseFunc | `Function` | false     | If present, it is called with the API response. More below.                 |
 | parseEntityFunc      | `Function` | false     | If present, it is called with each entity in the API response. More below.  |
-| schema               | `Schema`   | true      | The schema, from Normalizr, for the entity.                                 |
+| schema               | `Schema`   | false     | The schema, from Normalizr, for the entity.                                 |
 
 #### parseApiResponseFunc
 
