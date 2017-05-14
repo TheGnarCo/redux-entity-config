@@ -8,7 +8,9 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "test": "mocha --compilers js:babel-core/register test/**/*.tests.js*"
+    "lint": "eslint src test",
+    "mocha": "mocha --compilers js:babel-core/register test/**/*.tests.js*",
+    "test": "npm run lint && npm run mocha"
   },
   "dependencies": {
     "babel-core": "^6.24.1",
@@ -21,6 +23,12 @@
     "webpack": "^2.5.1"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^14.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^4.0.0",
+    "eslint-plugin-react": "^6.9.0",
     "expect": "^1.20.2",
     "mocha": "^3.3.0",
     "redux": "^3.6.0",
