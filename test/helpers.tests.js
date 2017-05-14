@@ -27,6 +27,20 @@ describe('ReduxEntityConfig - helpers', () => {
   });
 
   describe('#formatErrorResponse', () => {
+    context('when there are no error messages', () => {
+      it('returns only the http status', () => {
+        const errorResponse = {
+          status: 422,
+          message: {
+            message: 'Validation Failed',
+            errors: [],
+          },
+        };
+
+        expect(formatErrorResponse(errorResponse)).toEqual({ http_status: 422 });
+      });
+    });
+
     it('converts the error response to an object for redux state', () => {
       const errors = [
         { name: 'first_name',
