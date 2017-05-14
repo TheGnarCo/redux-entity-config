@@ -39,6 +39,14 @@ describe('ReduxEntityConfig - class', () => {
     });
   });
 
+  describe('#_genericRequest', () => {
+    it('throws an error when the type is not recognized', () => {
+      const config = new ReduxEntityConfig({ entityName: 'users' });
+
+      expect(() => config._genericRequest('foobar')).toThrow('Unknown request type: foobar');
+    });
+  });
+
   describe('#_parse', () => {
     const apiResponse = {
       users: [userStub],
