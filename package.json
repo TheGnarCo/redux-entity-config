@@ -9,10 +9,11 @@
   "scripts": {
     "build": "webpack",
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --compilers js:babel-core/register -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "cover-local": "istanbul cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel-core/register",
     "lint": "eslint src test",
     "mocha": "mocha --compilers js:babel-core/register test/**/*.tests.js*",
-    "test": "npm run lint && npm run mocha",
-    "test-ci": "npm run test && npm run cover"
+    "test": "npm run lint && npm run mocha && npm run cover-local",
+    "test-ci": "npm run lint && npm run mocha && npm run cover"
   },
   "dependencies": {
     "babel-core": "^6.24.1",
