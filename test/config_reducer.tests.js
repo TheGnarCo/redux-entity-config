@@ -18,12 +18,32 @@ describe('ReduxConfig - reducer', () => {
     },
   };
 
+  describe('initial state', () => {
+    it('is set to the ReduxConfig initial state', () => {
+      const action = { type: 'FOOBAR' };
+      const config = new ReduxConfig({ entityName: 'users', schema: schemas.USERS });
+
+      expect(config.reducer(undefined, action)).toEqual(ReduxConfig.initialState);
+    });
+  });
+
   describe('creating an entity', () => {
     const config = new ReduxConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
     const { actions, reducer } = config;
+
+    describe('request action', () => {
+      it('sets the loading attribute', () => {
+        const newState = reducer(ReduxConfig.initialState, actions.createRequest());
+
+        expect(newState).toEqual({
+          ...ReduxConfig.initialState,
+          loading: true,
+        });
+      });
+    });
 
     describe('successful action', () => {
       it('adds the user to state', () => {
