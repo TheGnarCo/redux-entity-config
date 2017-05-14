@@ -1,6 +1,7 @@
+import { schema } from 'normalizr';
+
 import BaseConfig from './base_config';
 import { entitiesExceptID } from './helpers';
-import { schema } from 'normalizr';
 
 export const ConfigSchema = (entityName) => {
   return new schema.Entity(entityName);
