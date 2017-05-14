@@ -1,12 +1,12 @@
 import expect from 'expect';
 
-import ReduxConfig, { ConfigSchema } from '../src/config';
+import ReduxConfig, { configSchema } from '../src/config';
 import stubs from './stubs';
 
 const userStub = stubs.users.valid;
 
 const schemas = {
-  USERS: ConfigSchema('users'),
+  USERS: configSchema('users'),
 };
 
 describe('ReduxConfig - reducer', () => {

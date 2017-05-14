@@ -1,6 +1,7 @@
 import expect from 'expect';
 import { noop } from 'lodash';
 
+import { configSchema } from '../src/helpers';
 import ReduxEntityConfig from '../src/config';
 import stubs from './stubs';
 
@@ -9,10 +10,18 @@ const userStub = stubs.users.valid;
 describe('ReduxEntityConfig - class', () => {
   it('sets properties when created', () => {
     const createFunc = noop;
-    const updateFunc = noop;
-    const config = new ReduxEntityConfig({ createFunc, updateFunc });
+    const entityName = 'users';
+    const config = new ReduxEntityConfig({ createFunc, entityName });
 
     expect(config.createFunc).toEqual(createFunc);
+    expect(config.entityName).toEqual(entityName);
+  });
+
+  it('sets the default schema', () => {
+    const entityName = 'users';
+    const config = new ReduxEntityConfig({ entityName });
+
+    expect(config.schema).toEqual(configSchema(entityName));
   });
 
   describe('#actionTypes', () => {

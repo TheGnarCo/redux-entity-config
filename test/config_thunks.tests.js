@@ -1,12 +1,12 @@
 import expect, { createSpy, restoreSpies } from 'expect';
 import { find } from 'lodash';
 
-import ReduxConfig, { ConfigSchema } from '../src/config';
+import ReduxConfig, { configSchema } from '../src/config';
 import reduxMockStore from './redux_mock_store';
 import stubs from './stubs';
 
 const schemas = {
-  USERS: ConfigSchema('users'),
+  USERS: configSchema('users'),
 };
 const userStub = stubs.users.valid;
 
