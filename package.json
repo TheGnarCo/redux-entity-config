@@ -1,6 +1,6 @@
 {
   "name": "redux-entity-config",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Configure redux entity state and actions",
   "main": "index.js",
   "repository": "https://github.com/TheGnarCo/redux-entity-config",
