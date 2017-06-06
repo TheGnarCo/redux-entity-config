@@ -1,12 +1,12 @@
 const path = require('path');
 
 module.exports = {
-  context: path.join(__dirname, 'src'),
-  entry: [
-    './config.js',
-  ],
+  context: path.resolve(__dirname, './src'),
+  entry: {
+    index: './config.js',
+  },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
   },
   module: {
     rules: [

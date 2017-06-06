@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -207,11 +207,17 @@ exports.default = PolymorphicSchema;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.formatErrorResponse = exports.entitiesExceptID = undefined;
+exports.formatErrorResponse = exports.entitiesExceptID = exports.configSchema = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _lodash = __webpack_require__(3);
+
+var _normalizr = __webpack_require__(4);
+
+var configSchema = exports.configSchema = function configSchema(entityName) {
+  return new _normalizr.schema.Entity(entityName);
+};
 
 var entitiesExceptID = exports.entitiesExceptID = function entitiesExceptID(entities, id) {
   return (0, _lodash.pickBy)(entities, function (entity, key) {
@@ -249,7 +255,7 @@ var formatErrorResponse = exports.formatErrorResponse = function formatErrorResp
   });
 };
 
-exports.default = { entitiesExceptID: entitiesExceptID, formatErrorResponse: formatErrorResponse };
+exports.default = { configSchema: configSchema, entitiesExceptID: entitiesExceptID, formatErrorResponse: formatErrorResponse };
 
 /***/ }),
 /* 3 */
@@ -17516,124 +17522,6 @@ var denormalize = exports.denormalize = function denormalize(input, schema, enti
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ConfigSchema = undefined;
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _base_config = __webpack_require__(6);
-
-var _base_config2 = _interopRequireDefault(_base_config);
-
-var _helpers = __webpack_require__(2);
-
-var _normalizr = __webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ConfigSchema = exports.ConfigSchema = function ConfigSchema(entityName) {
-  return new _normalizr.schema.Entity(entityName);
-};
-
-var ReduxConfig = function (_BaseConfig) {
-  _inherits(ReduxConfig, _BaseConfig);
-
-  function ReduxConfig() {
-    _classCallCheck(this, ReduxConfig);
-
-    return _possibleConstructorReturn(this, (ReduxConfig.__proto__ || Object.getPrototypeOf(ReduxConfig)).apply(this, arguments));
-  }
-
-  _createClass(ReduxConfig, [{
-    key: 'actions',
-    get: function get() {
-      return this.allActions();
-    }
-  }, {
-    key: 'reducer',
-    get: function get() {
-      var actionTypes = this.actionTypes,
-          entityName = this.entityName;
-
-
-      return function () {
-        var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _base_config2.default.initialState;
-        var _ref = arguments[1];
-        var type = _ref.type,
-            payload = _ref.payload;
-
-        switch (type) {
-          case actionTypes.CLEAR_ERRORS:
-            return _extends({}, state, {
-              errors: {}
-            });
-          case actionTypes.CREATE_REQUEST:
-          case actionTypes.DESTROY_REQUEST:
-          case actionTypes.LOAD_REQUEST:
-          case actionTypes.UPDATE_REQUEST:
-            return _extends({}, state, {
-              errors: {},
-              loading: true
-            });
-          case actionTypes.LOAD_ALL_SUCCESS:
-            return _extends({}, state, {
-              loading: false,
-              errors: {},
-              data: _extends({}, payload.data[entityName])
-            });
-          case actionTypes.CREATE_SUCCESS:
-          case actionTypes.UPDATE_SUCCESS:
-          case actionTypes.LOAD_SUCCESS:
-            return _extends({}, state, {
-              loading: false,
-              errors: {},
-              data: _extends({}, state.data, payload.data[entityName])
-            });
-          case actionTypes.DESTROY_SUCCESS:
-            {
-              return _extends({}, state, {
-                loading: false,
-                errors: {},
-                data: _extends({}, (0, _helpers.entitiesExceptID)(state.data, payload.data))
-              });
-            }
-          case actionTypes.CREATE_FAILURE:
-          case actionTypes.DESTROY_FAILURE:
-          case actionTypes.UPDATE_FAILURE:
-          case actionTypes.LOAD_FAILURE:
-            return _extends({}, state, {
-              loading: false,
-              errors: payload.errors
-            });
-          default:
-            return state;
-        }
-      };
-    }
-  }]);
-
-  return ReduxConfig;
-}(_base_config2.default);
-
-exports.default = ReduxConfig;
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -17660,7 +17548,7 @@ var BaseConfig = function () {
     this.loadFunc = inputs.loadFunc;
     this.parseApiResponseFunc = inputs.parseApiResponseFunc;
     this.parseEntityFunc = inputs.parseEntityFunc;
-    this.schema = inputs.schema;
+    this.schema = inputs.schema || (0, _helpers.configSchema)(inputs.entityName);
     this.successAction = this.successAction.bind(this);
     this.updateFunc = inputs.updateFunc;
 
@@ -17943,6 +17831,124 @@ BaseConfig.TYPES = {
   UPDATE: 'UPDATE'
 };
 exports.default = BaseConfig;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.configSchema = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _base_config = __webpack_require__(5);
+
+var _base_config2 = _interopRequireDefault(_base_config);
+
+var _helpers = __webpack_require__(2);
+
+var _helpers2 = _interopRequireDefault(_helpers);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var entitiesExceptID = _helpers2.default.entitiesExceptID;
+var configSchema = _helpers2.default.configSchema;
+exports.configSchema = configSchema;
+
+var ReduxEntityConfig = function (_BaseConfig) {
+  _inherits(ReduxEntityConfig, _BaseConfig);
+
+  function ReduxEntityConfig() {
+    _classCallCheck(this, ReduxEntityConfig);
+
+    return _possibleConstructorReturn(this, (ReduxEntityConfig.__proto__ || Object.getPrototypeOf(ReduxEntityConfig)).apply(this, arguments));
+  }
+
+  _createClass(ReduxEntityConfig, [{
+    key: 'actions',
+    get: function get() {
+      return this.allActions();
+    }
+  }, {
+    key: 'reducer',
+    get: function get() {
+      var actionTypes = this.actionTypes,
+          entityName = this.entityName;
+
+
+      return function () {
+        var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _base_config2.default.initialState;
+        var _ref = arguments[1];
+        var type = _ref.type,
+            payload = _ref.payload;
+
+        switch (type) {
+          case actionTypes.CLEAR_ERRORS:
+            return _extends({}, state, {
+              errors: {}
+            });
+          case actionTypes.CREATE_REQUEST:
+          case actionTypes.DESTROY_REQUEST:
+          case actionTypes.LOAD_REQUEST:
+          case actionTypes.UPDATE_REQUEST:
+            return _extends({}, state, {
+              errors: {},
+              loading: true
+            });
+          case actionTypes.LOAD_ALL_SUCCESS:
+            return _extends({}, state, {
+              loading: false,
+              errors: {},
+              data: _extends({}, payload.data[entityName])
+            });
+          case actionTypes.CREATE_SUCCESS:
+          case actionTypes.UPDATE_SUCCESS:
+          case actionTypes.LOAD_SUCCESS:
+            return _extends({}, state, {
+              loading: false,
+              errors: {},
+              data: _extends({}, state.data, payload.data[entityName])
+            });
+          case actionTypes.DESTROY_SUCCESS:
+            {
+              return _extends({}, state, {
+                loading: false,
+                errors: {},
+                data: _extends({}, entitiesExceptID(state.data, payload.data))
+              });
+            }
+          case actionTypes.CREATE_FAILURE:
+          case actionTypes.DESTROY_FAILURE:
+          case actionTypes.UPDATE_FAILURE:
+          case actionTypes.LOAD_FAILURE:
+            return _extends({}, state, {
+              loading: false,
+              errors: payload.errors
+            });
+          default:
+            return state;
+        }
+      };
+    }
+  }]);
+
+  return ReduxEntityConfig;
+}(_base_config2.default);
+
+exports.default = ReduxEntityConfig;
 
 /***/ }),
 /* 7 */
@@ -18443,13 +18449,6 @@ module.exports = function(module) {
 	}
 	return module;
 };
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(5);
 
 
 /***/ })
