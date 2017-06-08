@@ -1,6 +1,6 @@
 import expect from 'expect';
 
-import ReduxConfig, { configSchema } from '../src/config';
+import ReduxConfig, { configSchema } from '../index';
 import stubs from './stubs';
 
 const userStub = stubs.users.valid;

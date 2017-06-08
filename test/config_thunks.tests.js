@@ -1,7 +1,7 @@
 import expect, { createSpy, restoreSpies } from 'expect';
 import { find } from 'lodash';
 
-import ReduxConfig, { configSchema } from '../src/config';
+import ReduxConfig, { configSchema } from '../index';
 import reduxMockStore from './redux_mock_store';
 import stubs from './stubs';
 

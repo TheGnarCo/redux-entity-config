@@ -1,8 +1,7 @@
 import expect from 'expect';
 import { noop } from 'lodash';
 
-import { configSchema } from '../src/helpers';
-import ReduxEntityConfig from '../src/config';
+import ReduxEntityConfig, { configSchema } from '../index';
 import stubs from './stubs';
 
 const userStub = stubs.users.valid;
