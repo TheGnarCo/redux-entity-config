@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   context: path.resolve(__dirname, './src'),
@@ -20,6 +21,9 @@ module.exports = {
       }
     ],
   },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({ minimize: true })
+  ],
   resolve: {
     modules: [
       path.join(__dirname, 'node_modules'),
