@@ -1,6 +1,6 @@
 import expect from 'expect';
 
-import ReduxConfig, { configSchema } from '../index';
+import ReduxEntityConfig, { configSchema } from '../src/config';
 import stubs from './stubs';
 
 const userStub = stubs.users.valid;
@@ -9,7 +9,7 @@ const schemas = {
   USERS: configSchema('users'),
 };
 
-describe('ReduxConfig - reducer', () => {
+describe('ReduxEntityConfig - reducer', () => {
   const state = {
     loading: false,
     errors: {},
@@ -19,16 +19,16 @@ describe('ReduxConfig - reducer', () => {
   };
 
   describe('initial state', () => {
-    it('is set to the ReduxConfig initial state', () => {
+    it('is set to the ReduxEntityConfig initial state', () => {
       const action = { type: 'FOOBAR' };
-      const config = new ReduxConfig({ entityName: 'users', schema: schemas.USERS });
+      const config = new ReduxEntityConfig({ entityName: 'users', schema: schemas.USERS });
 
-      expect(config.reducer(undefined, action)).toEqual(ReduxConfig.initialState);
+      expect(config.reducer(undefined, action)).toEqual(ReduxEntityConfig.initialState);
     });
   });
 
   describe('creating an entity', () => {
-    const config = new ReduxConfig({
+    const config = new ReduxEntityConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
@@ -36,10 +36,10 @@ describe('ReduxConfig - reducer', () => {
 
     describe('request action', () => {
       it('sets the loading attribute', () => {
-        const newState = reducer(ReduxConfig.initialState, actions.createRequest());
+        const newState = reducer(ReduxEntityConfig.initialState, actions.createRequest());
 
         expect(newState).toEqual({
-          ...ReduxConfig.initialState,
+          ...ReduxEntityConfig.initialState,
           loading: true,
         });
       });
@@ -49,7 +49,7 @@ describe('ReduxConfig - reducer', () => {
       it('adds the user to state', () => {
         const createSuccessAction = actions.successAction([userStub], actions.createSuccess);
 
-        const newState = reducer(ReduxConfig.initialState, createSuccessAction);
+        const newState = reducer(ReduxEntityConfig.initialState, createSuccessAction);
 
         expect(newState).toEqual({
           loading: false,
@@ -66,7 +66,7 @@ describe('ReduxConfig - reducer', () => {
         const errors = { base: 'User is not authenticated' };
         const createFailureAction = actions.createFailure(errors);
 
-        const newState = reducer(ReduxConfig.initialState, createFailureAction);
+        const newState = reducer(ReduxEntityConfig.initialState, createFailureAction);
 
         expect(newState).toEqual({
           loading: false,
@@ -78,7 +78,7 @@ describe('ReduxConfig - reducer', () => {
   });
 
   describe('destroying an entity', () => {
-    const config = new ReduxConfig({
+    const config = new ReduxEntityConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
@@ -114,7 +114,7 @@ describe('ReduxConfig - reducer', () => {
   });
 
   describe('loading an entity', () => {
-    const config = new ReduxConfig({
+    const config = new ReduxEntityConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
@@ -124,7 +124,7 @@ describe('ReduxConfig - reducer', () => {
       it('adds the user to state', () => {
         const loadSuccessAction = actions.successAction([userStub], actions.loadSuccess);
 
-        const newState = reducer(ReduxConfig.initialState, loadSuccessAction);
+        const newState = reducer(ReduxEntityConfig.initialState, loadSuccessAction);
 
         expect(newState).toEqual({
           loading: false,
@@ -141,7 +141,7 @@ describe('ReduxConfig - reducer', () => {
         const errors = { base: 'User is not authenticated' };
         const loadFailureAction = actions.loadFailure(errors);
 
-        const newState = reducer(ReduxConfig.initialState, loadFailureAction);
+        const newState = reducer(ReduxEntityConfig.initialState, loadFailureAction);
 
         expect(newState).toEqual({
           loading: false,
@@ -153,7 +153,7 @@ describe('ReduxConfig - reducer', () => {
   });
 
   describe('loading all entities', () => {
-    const config = new ReduxConfig({
+    const config = new ReduxEntityConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
@@ -178,7 +178,7 @@ describe('ReduxConfig - reducer', () => {
   });
 
   describe('updating an entity', () => {
-    const config = new ReduxConfig({
+    const config = new ReduxEntityConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
@@ -225,7 +225,7 @@ describe('ReduxConfig - reducer', () => {
         [userStub.id]: userStub,
       },
     };
-    const config = new ReduxConfig({
+    const config = new ReduxEntityConfig({
       entityName: 'users',
       schema: schemas.USERS,
     });
