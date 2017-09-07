@@ -1,7 +1,7 @@
 import { capitalize, isArray } from 'lodash';
 import { normalize } from 'normalizr';
 
-import { configSchema, formatErrorResponse } from './helpers';
+import { configSchema } from './helpers';
 
 class BaseConfig {
   constructor (inputs) {
@@ -12,6 +12,7 @@ class BaseConfig {
     this.loadFunc = inputs.loadFunc;
     this.parseApiResponseFunc = inputs.parseApiResponseFunc;
     this.parseEntityFunc = inputs.parseEntityFunc;
+    this.parseServerErrorsFunc = inputs.parseServerErrorsFunc || (errors => errors);
     this.schema = inputs.schema || configSchema(inputs.entityName);
     this.successAction = this.successAction.bind(this);
     this.updateFunc = inputs.updateFunc;
@@ -180,7 +181,7 @@ class BaseConfig {
           })
           .catch((response) => {
             const thunk = this._genericFailure(type);
-            const errorsObject = formatErrorResponse(response);
+            const errorsObject = this.parseServerErrorsFunc(response);
 
             dispatch(thunk(errorsObject));
 

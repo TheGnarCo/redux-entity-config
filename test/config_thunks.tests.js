@@ -37,6 +37,14 @@ const standardError = {
   },
 };
 
+const parseServerErrorsFunc = (response) => {
+  const error = response.message.errors[0];
+  const errorResponse = { http_status: response.status };
+  errorResponse[error.name] = error.reason;
+
+  return errorResponse;
+};
+
 describe('ReduxEntityConfig - thunks', () => {
   describe('#create', () => {
     afterEach(() => restoreSpies());
@@ -88,6 +96,7 @@ describe('ReduxEntityConfig - thunks', () => {
       const config = new ReduxConfig({
         createFunc,
         entityName: 'users',
+        parseServerErrorsFunc,
         schema: schemas.USERS,
       });
 
@@ -167,6 +176,7 @@ describe('ReduxEntityConfig - thunks', () => {
       const config = new ReduxConfig({
         destroyFunc,
         entityName: 'users',
+        parseServerErrorsFunc,
         schema: schemas.USERS,
       });
 
@@ -246,6 +256,7 @@ describe('ReduxEntityConfig - thunks', () => {
       const config = new ReduxConfig({
         entityName: 'users',
         loadFunc,
+        parseServerErrorsFunc,
         schema: schemas.USERS,
       });
 
@@ -325,6 +336,7 @@ describe('ReduxEntityConfig - thunks', () => {
       const config = new ReduxConfig({
         entityName: 'users',
         loadAllFunc,
+        parseServerErrorsFunc,
         schema: schemas.USERS,
       });
 
@@ -403,6 +415,7 @@ describe('ReduxEntityConfig - thunks', () => {
         .andCall(() => Promise.reject(standardError));
       const config = new ReduxConfig({
         entityName: 'users',
+        parseServerErrorsFunc,
         schema: schemas.USERS,
         updateFunc,
       });
@@ -439,6 +452,28 @@ describe('ReduxEntityConfig - thunks', () => {
             });
           });
       });
+    });
+  });
+
+  describe('unsuccessful call with no parseServerErrorsFunc passed to config block', () => {
+    const updateFunc = () => Promise.reject(standardError);
+    const config = new ReduxConfig({
+      entityName: 'users',
+      schema: schemas.USERS,
+      updateFunc,
+    });
+
+    it('returns the unformatted result as the errors response', () => {
+      const mockStore = reduxMockStore(store);
+
+      return mockStore.dispatch(config.actions.update())
+        .catch((response) => {
+          const dispatchedActions = mockStore.getActions();
+          const updateFailureAction = find(dispatchedActions, { type: 'users_UPDATE_FAILURE' });
+
+          expect(response).toEqual(standardError);
+          expect(updateFailureAction.payload).toEqual({ errors: standardError });
+        });
     });
   });
 });

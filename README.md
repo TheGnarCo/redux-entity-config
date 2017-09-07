@@ -11,7 +11,7 @@ to a common configuration class.
 ## Getting Started
 
 ```bash
-yarn add react-entity-config
+yarn add redux-entity-config
 ```
 
 ## Usage
@@ -21,17 +21,18 @@ yarn add react-entity-config
 The first step to configuring an entity is to create an instance of the
 `ReduxEntityConfig` class, passing it the following options:
 
-| Option               | Type       | Required? | Description                                                                 |
-|----------------------|------------|-----------|-----------------------------------------------------------------------------|
-| entityName           | `String`   | true      | The name of the entity (ie users)                                           |
-| createFunc           | `Function` | false     | The function (API call) used to create an entity                            |
-| destroyFunc          | `Function` | false     | The function (API call) used to destroy an entity                           |
-| loadFunc             | `Function` | false     | The function (API call) used to load a single entity                        |
-| loadAllFunc          | `Function` | false     | The function (API call) used to load all of the entities                    |
-| updateFunc           | `Function` | false     | The function (API call) used to update an entity                            |
-| parseApiResponseFunc | `Function` | false     | If present, it is called with the API response. More below.                 |
-| parseEntityFunc      | `Function` | false     | If present, it is called with each entity in the API response. More below.  |
-| schema               | `Schema`   | false     | The schema, from Normalizr, for the entity.                                 |
+| Option                 | Type         | Required?   | Description                                                                   |
+| ---------------------- | ------------ | ----------- | ----------------------------------------------------------------------------- |
+| entityName             | `String`     | true        | The name of the entity (ie users)                                             |
+| createFunc             | `Function`   | false       | The function (API call) used to create an entity                              |
+| destroyFunc            | `Function`   | false       | The function (API call) used to destroy an entity                             |
+| loadFunc               | `Function`   | false       | The function (API call) used to load a single entity                          |
+| loadAllFunc            | `Function`   | false       | The function (API call) used to load all of the entities                      |
+| updateFunc             | `Function`   | false       | The function (API call) used to update an entity                              |
+| parseApiResponseFunc   | `Function`   | false       | If present, it is called with the API response. More below.                   |
+| parseEntityFunc        | `Function`   | false       | If present, it is called with each entity in the API response. More below.    |
+| parseServerErrorsFunc  | `Function`   | false       | If present, it is called with the API error object. More below.               |
+| schema                 | `Schema`     | false       | The schema, from Normalizr, for the entity.                                   |
 
 #### parseApiResponseFunc
 
@@ -59,6 +60,7 @@ The `parseApiResponseFunc` would select the user from the response:
 const parseApiResponseFunc = apiResponse => apiResponse.user;
 ```
 
+
 #### parseEntityFunc
 
 This optional function is passed each entity in the API response and can
@@ -75,6 +77,42 @@ const parseEntityFunc = (userEntity) => {
   };
 };
 ```
+
+
+### parseServerErrorsFunc
+
+This optional function is used to parse the error object returned from an unsuccessful API request.
+This allows the client to standardize how it administers error data from various API endpoints to
+the rest of the system.
+
+Example:
+
+Given this API error response:
+
+```js
+{
+  status: 422,
+  message: 'Unauthenticated',
+  errors: [
+    {
+      name: 'base',
+      reason: 'User is not authenticated',
+    },
+  ],
+}
+```
+
+`parseServerErrorsFunc` can be used to return a modified error object:
+
+```js
+const parseServerErrorsFunc = (apiError) => {
+  return {
+    http_status: apiError.status,
+    errors: apiError.errors,
+  };
+};
+```
+
 
 ### 2) Extract the actions and reducers from the ReduxEntityConfigInstance
 
@@ -232,3 +270,5 @@ with the entities in the payload.
 
 This thunk is the same as the `loadAll` thunk but it does not call the
 `loadRequest` action.
+
+
