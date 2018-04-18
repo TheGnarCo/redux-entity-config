@@ -1,3 +1,5 @@
+import _uniq from 'lodash/uniq';
+import _without from 'lodash/without';
 import BaseConfig from './base_config';
 import helpers from './helpers';
 
@@ -34,6 +36,7 @@ class ReduxEntityConfig extends BaseConfig {
             ...state,
             loading: false,
             errors: {},
+            sortedIds: payload.data.sortedIds,
             data: {
               ...payload.data[entityName],
             },
@@ -45,6 +48,7 @@ class ReduxEntityConfig extends BaseConfig {
             ...state,
             loading: false,
             errors: {},
+            sortedIds: _uniq([...state.sortedIds, ...payload.data.sortedIds]),
             data: {
               ...state.data,
               ...payload.data[entityName],
@@ -55,6 +59,7 @@ class ReduxEntityConfig extends BaseConfig {
             ...state,
             loading: false,
             errors: {},
+            sortedIds: _without(state.sortedIds, payload.data.id),
             data: {
               ...entitiesExceptID(state.data, payload.data.id),
             },

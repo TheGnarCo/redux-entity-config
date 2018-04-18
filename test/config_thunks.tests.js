@@ -72,6 +72,7 @@ describe('ReduxEntityConfig - thunks', () => {
             expect(dispatchedActionTypes).toNotInclude('users_CREATE_FAILURE');
             expect(successAction.payload).toEqual({
               data: {
+                sortedIds: [userStub.id],
                 users: {
                   [userStub.id]: userStub,
                 },
@@ -140,6 +141,7 @@ describe('ReduxEntityConfig - thunks', () => {
       const mockStore = reduxMockStore({
         ...store,
         data: { [userStub.id]: userStub },
+        sortedIds: [userStub.id],
       });
 
       it('calls the destroyFunc', () => {
@@ -173,7 +175,7 @@ describe('ReduxEntityConfig - thunks', () => {
             const state = mockStore.getState();
 
             expect(destroySuccessAction.payload).toEqual({ data: { id: userStub.id } });
-            expect(config.reducer(state, destroySuccessAction)).toEqual(store);
+            expect(config.reducer(state, destroySuccessAction)).toEqual({ ...store, sortedIds: [] });
           });
       });
     });

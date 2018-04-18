@@ -25,6 +25,7 @@ class BaseConfig {
   static initialState = {
     loading: false,
     errors: {},
+    sortedIds: [],
     data: {},
   }
 
@@ -121,9 +122,9 @@ class BaseConfig {
     const { _parse, schema } = this;
     const parsable = isArray(response) ? response : [response];
     const parsed = _parse(parsable);
-    const { entities } = normalize(parsed, [schema]);
+    const { entities, result } = normalize(parsed, [schema]);
 
-    return thunk(entities);
+    return thunk({ sortedIds: result, ...entities });
   }
 
   // PRIVATE METHODS
