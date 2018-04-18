@@ -12,6 +12,7 @@ const schemas = {
 describe('ReduxEntityConfig - reducer', () => {
   const state = {
     loading: false,
+    sortedIds: [userStub.id],
     errors: {},
     data: {
       [userStub.id]: userStub,
@@ -54,10 +55,20 @@ describe('ReduxEntityConfig - reducer', () => {
         expect(newState).toEqual({
           loading: false,
           errors: {},
+          sortedIds: [userStub.id],
           data: {
             [userStub.id]: userStub,
           },
         });
+      });
+
+      it('appends the id to sortedIds', () => {
+        const createSuccessAction = actions.successAction([userStub], actions.createSuccess);
+        const initialState = { ...ReduxEntityConfig.initialState, sortedIds: [0, 2] };
+
+        const newState = reducer(initialState, createSuccessAction);
+
+        expect(newState.sortedIds).toEqual([0, 2, 1]);
       });
     });
 
@@ -71,6 +82,7 @@ describe('ReduxEntityConfig - reducer', () => {
         expect(newState).toEqual({
           loading: false,
           errors,
+          sortedIds: [],
           data: {},
         });
       });
@@ -93,8 +105,18 @@ describe('ReduxEntityConfig - reducer', () => {
         expect(newState).toEqual({
           loading: false,
           errors: {},
+          sortedIds: [],
           data: {},
         });
+      });
+
+      it('removes the id from sortedIds', () => {
+        const destroySuccessAction = actions.destroySuccess({ id: userStub.id });
+        const initialState = { ...ReduxEntityConfig.initialState, sortedIds: [userStub.id, 2, 3] };
+
+        const newState = reducer(initialState, destroySuccessAction);
+
+        expect(newState.sortedIds).toEqual([2, 3]);
       });
     });
 
@@ -129,10 +151,29 @@ describe('ReduxEntityConfig - reducer', () => {
         expect(newState).toEqual({
           loading: false,
           errors: {},
+          sortedIds: [userStub.id],
           data: {
             [userStub.id]: userStub,
           },
         });
+      });
+
+      it('appends a new user to the end of sortedIds', () => {
+        const loadSuccessAction = actions.successAction([userStub], actions.loadSuccess);
+
+        const initialState = { ...ReduxEntityConfig.initialState, sortedIds: [0, 2] };
+        const newState = reducer(initialState, loadSuccessAction);
+
+        expect(newState.sortedIds).toEqual([0, 2, 1]);
+      });
+
+      it('leaves an existing user in place in sortedIds', () => {
+        const loadSuccessAction = actions.successAction([userStub], actions.loadSuccess);
+
+        const initialState = { ...ReduxEntityConfig.initialState, sortedIds: [0, 1, 2] };
+        const newState = reducer(initialState, loadSuccessAction);
+
+        expect(newState.sortedIds).toEqual([0, 1, 2]);
       });
     });
 
@@ -146,6 +187,7 @@ describe('ReduxEntityConfig - reducer', () => {
         expect(newState).toEqual({
           loading: false,
           errors,
+          sortedIds: [],
           data: {},
         });
       });
@@ -169,6 +211,7 @@ describe('ReduxEntityConfig - reducer', () => {
         expect(newState).toEqual({
           loading: false,
           errors: {},
+          sortedIds: [101],
           data: {
             101: newUser,
           },
@@ -187,16 +230,24 @@ describe('ReduxEntityConfig - reducer', () => {
 
     describe('successful action', () => {
       const updateSuccessAction = actions.successAction([newUser], actions.updateSuccess);
-      const newState = reducer(state, updateSuccessAction);
 
       it('replaces the user in state', () => {
+        const newState = reducer(state, updateSuccessAction);
+
         expect(newState).toEqual({
           loading: false,
           errors: {},
+          sortedIds: [userStub.id],
           data: {
             [userStub.id]: newUser,
           },
         });
+      });
+
+      it('leaves the id in place in sortedIds', () => {
+        const newState = reducer({ ...state, sortedIds: [0, 1, 2] }, updateSuccessAction);
+
+        expect(newState.sortedIds).toEqual([0, 1, 2]);
       });
     });
 
@@ -221,6 +272,7 @@ describe('ReduxEntityConfig - reducer', () => {
       errors: {
         base: 'User is not authenticated',
       },
+      sortedIds: [userStub.id],
       data: {
         [userStub.id]: userStub,
       },
