@@ -56,7 +56,7 @@ class ReduxEntityConfig extends BaseConfig {
             loading: false,
             errors: {},
             data: {
-              ...entitiesExceptID(state.data, payload.data),
+              ...entitiesExceptID(state.data, payload.data.id),
             },
           };
         }

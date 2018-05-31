@@ -86,7 +86,7 @@ describe('ReduxEntityConfig - reducer', () => {
 
     describe('successful action', () => {
       it('removes the user from state', () => {
-        const destroySuccessAction = actions.destroySuccess(userStub.id);
+        const destroySuccessAction = actions.destroySuccess({ id: userStub.id });
 
         const newState = reducer(state, destroySuccessAction);
 
