@@ -11,18 +11,9 @@ const schemas = {
 const userStub = stubs.users.valid;
 
 const store = {
-  entities: {
-    invites: {
-      errors: {},
-      data: {},
-      loading: false,
-    },
-    users: {
-      errors: {},
-      data: {},
-      loading: false,
-    },
-  },
+  errors: {},
+  data: {},
+  loading: false,
 };
 const standardError = {
   status: 422,
@@ -146,7 +137,10 @@ describe('ReduxEntityConfig - thunks', () => {
         entityName: 'users',
         schema: schemas.USERS,
       });
-      const mockStore = reduxMockStore(store);
+      const mockStore = reduxMockStore({
+        ...store,
+        data: { [userStub.id]: userStub },
+      });
 
       it('calls the destroyFunc', () => {
         const params = { id: 1 };
@@ -166,6 +160,20 @@ describe('ReduxEntityConfig - thunks', () => {
             expect(dispatchedActionTypes).toInclude('users_DESTROY_REQUEST');
             expect(dispatchedActionTypes).toInclude('users_DESTROY_SUCCESS');
             expect(dispatchedActionTypes).toNotInclude('users_DESTROY_FAILURE');
+          });
+      });
+
+      it('removes the entity from state', () => {
+        const promise = config.actions.destroy({ id: userStub.id });
+
+        return mockStore.dispatch(promise)
+          .then(() => {
+            const dispatchedActions = mockStore.getActions();
+            const destroySuccessAction = dispatchedActions.find(action => action.type === 'users_DESTROY_SUCCESS');
+            const state = mockStore.getState();
+
+            expect(destroySuccessAction.payload).toEqual({ data: { id: userStub.id } });
+            expect(config.reducer(state, destroySuccessAction)).toEqual(store);
           });
       });
     });

@@ -107,6 +107,8 @@ class BaseConfig {
       ...this._genericActions(TYPES.DESTROY),
       ...this._genericActions(TYPES.LOAD),
       ...this._genericActions(TYPES.UPDATE),
+      destroy: this._destroyThunkAction(),
+      silentDestroy: this._destroyThunkAction({ silent: true }),
     };
   }
 
@@ -143,6 +145,36 @@ class BaseConfig {
       default:
         throw new Error(`Unknown api call for type: ${type}`);
     }
+  }
+
+  _destroyThunkAction (options = {}) {
+    const { TYPES } = BaseConfig;
+
+    return (args) => {
+      return (dispatch) => {
+        if (!options.silent) {
+          dispatch(this._genericRequest(TYPES.DESTROY)());
+        }
+
+        return this.destroyFunc(args)
+          .then(() => {
+            const thunk = this._genericSuccess(TYPES.DESTROY);
+            const action = thunk(args);
+
+            dispatch(action);
+
+            return args;
+          })
+          .catch((response) => {
+            const thunk = this._genericFailure(TYPES.DESTROY);
+            const errorsObject = this.parseServerErrorsFunc(response);
+
+            dispatch(thunk(errorsObject));
+
+            throw errorsObject;
+          });
+      };
+    };
   }
 
   _genericActions (type) {
